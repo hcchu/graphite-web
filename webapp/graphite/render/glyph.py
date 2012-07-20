@@ -762,8 +762,14 @@ class LineGraph(Graph):
 
           if series[i] is not None:
             original = series[i]
-            series[i] += total[i]
-            total[i] += original
+            if series[i] >= 0 and total[i] >= 0:
+              series[i] += total[i]
+              total[i] += original
+            elif series[i] < 0 and total[i] < 0:
+              series[i] -= total[i]
+              total[i] -= original
+            else:
+              next
 
     # check whether there is an stacked metric
     singleStacked = False
@@ -969,7 +975,7 @@ class LineGraph(Graph):
       sumSeries = []
 
       for i in xrange(0, length):
-        sumSeries.append( safeSum( [series[i] for series in self.data if not series.options.get('drawAsInfinite')] ) )
+        sumSeries.append( safeSum( [abs(series[i]) for series in self.data if series[i] is not None and not series.options.get('drawAsInfinite')] ) )
       yMaxValue = safeMax( sumSeries )
     else:
       yMaxValue = safeMax( [safeMax(series) for series in self.data if not series.options.get('drawAsInfinite')] )
