@@ -922,8 +922,12 @@ class LineGraph(Graph):
     startX = (startX or self.area['xmin'])
     pattern = self.ctx.copy_path()
 
-    self.ctx.line_to(x, self.area['ymax'])                  # bottom endX
-    self.ctx.line_to(startX, self.area['ymax'])             # bottom startX
+    self.ctx.line_to(x, self.getYCoord(0.0))
+    self.ctx.line_to(startX, self.getYCoord(0.0))
+    self.ctx.close_path()
+    self.ctx.fill()
+    self.ctx.line_to(x, self.area['ymax'])
+    self.ctx.line_to(startX, self.area['ymax'])
     self.ctx.close_path()
     self.ctx.fill()
 

@@ -555,6 +555,17 @@ def absolute(requestContext, seriesList):
       series[i] = safeAbs(value)
   return seriesList
 
+def mirror(requestContext, seriesList):
+  """
+  Takes one metric or a wildcard seriesList and negates each value
+  """
+  for series in seriesList:
+    series.name = "mirror(%s)" % (series.name)
+    for i,value in enumerate(series):
+        if value is not None:
+            series[i] = -(value)
+    return seriesList
+
 def offset(requestContext, seriesList, factor):
   """
   Takes one metric or a wildcard seriesList followed by a constant, and adds the constant to
@@ -2508,6 +2519,7 @@ SeriesFunctions = {
   'smartSummarize' : smartSummarize,
   'hitcount'  : hitcount,
   'absolute' : absolute,
+  'mirror' : mirror,
 
   # Calculate functions
   'movingAverage' : movingAverage,
